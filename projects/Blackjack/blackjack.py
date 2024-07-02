@@ -1,7 +1,9 @@
 import random
 
+
 def clear():
     print("")
+
 
 # How much risk the house takes
 HOUSE_TOLERANCE = 5
@@ -179,7 +181,7 @@ def request_cards(player):
 
         wants_more_cards = player_choice == 'y'
 
-        if wants_more_cards == False:
+        if not wants_more_cards:
             clear()
             return
 
