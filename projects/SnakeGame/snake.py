@@ -1,0 +1,61 @@
+from time import sleep
+from turtle import Turtle
+
+BODY_PART_SIZE = 20
+
+
+class Snake:
+    INITIAL_LENGTH = 3
+    RIGHT = 0
+    UP = 90
+    LEFT = 180
+    DOWN = 270
+    SPEED = 20
+
+    def __init__(self):
+        self.body = []
+
+        self.create_snake()
+
+        self.alive = True
+
+    def create_snake(self):
+        for i in range(self.INITIAL_LENGTH):
+            new_body = Turtle(shape="square")
+            new_body.color("white")
+            new_body.teleport(x=0 - (BODY_PART_SIZE * i), y=0)
+            new_body.penup()
+
+            self.body.append(new_body)
+
+    def move_body(self):
+        for i in range(len(self.body) - 1, 0, -1):
+            prev_x = self.body[i - 1].xcor()
+            prev_y = self.body[i - 1].ycor()
+
+            self.body[i].goto(prev_x, prev_y)
+
+    def move_forward(self):
+        sleep(1 / 10)
+
+        self.move_body()
+
+        self.body[0].forward(self.SPEED)
+
+        self.check_collision()
+
+    def turn_east(self):
+        if self.body[0].heading() != self.LEFT:
+            self.body[0].setheading(self.RIGHT)
+
+    def turn_north(self):
+        if self.body[0].heading() != self.DOWN:
+            self.body[0].setheading(self.UP)
+
+    def turn_west(self):
+        if self.body[0].heading() != self.RIGHT:
+            self.body[0].setheading(self.LEFT)
+
+    def turn_south(self):
+        if self.body[0].heading() != self.UP:
+            self.body[0].setheading(self.DOWN)
