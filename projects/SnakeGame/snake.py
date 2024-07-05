@@ -14,19 +14,28 @@ class Snake:
 
     def __init__(self):
         self.body = []
+        self.head = None
 
         self.create_snake()
 
         self.alive = True
 
-    def create_snake(self):
-        for i in range(self.INITIAL_LENGTH):
-            new_body = Turtle(shape="square")
-            new_body.color("white")
-            new_body.teleport(x=0 - (BODY_PART_SIZE * i), y=0)
-            new_body.penup()
+    def add_part(self):
+        new_body = Turtle(shape="square")
+        new_body.color("white")
+        new_body.teleport(
+            0 if len(self.body) == 0 else self.body[-1].xcor(),
+            0 if len(self.body) == 0 else self.body[-1].ycor(),
+        )
+        new_body.penup()
 
-            self.body.append(new_body)
+        self.body.append(new_body)
+
+    def create_snake(self):
+        for _ in range(self.INITIAL_LENGTH):
+            self.add_part()
+
+        self.head = self.body[0]
 
     def move_body(self):
         for i in range(len(self.body) - 1, 0, -1):
@@ -35,14 +44,15 @@ class Snake:
 
             self.body[i].goto(prev_x, prev_y)
 
+    def grow_body(self):
+        self.add_part()
+
     def move_forward(self):
         sleep(1 / 10)
 
         self.move_body()
 
         self.body[0].forward(self.SPEED)
-
-        self.check_collision()
 
     def turn_east(self):
         if self.body[0].heading() != self.LEFT:
