@@ -44,7 +44,6 @@ while still_alive:
     screen.update()
 
     if snake.head.distance(food) < 15:
-        print("Yummy")
         snake.grow_body()
         score.update_score()
         food.relocate(WIDTH, HEIGHT)
