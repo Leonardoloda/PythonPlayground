@@ -34,7 +34,7 @@ screen.onkey(key="Down", fun=left_racket.down)
 left_score.show_score()
 right_score.show_score()
 
-while True:
+while left_score.points < Constants.SCORE_TARGET and right_score.points < Constants.SCORE_TARGET:
     screen.update()
     ball.move()
 
@@ -49,16 +49,12 @@ while True:
     right_racket_top_y = right_racket_y + Constants.RACKET_HEIGHT / 2
     right_racket_bottom_y = right_racket_y - Constants.RACKET_HEIGHT / 2
 
-    if ball_x == Constants.LEFT_PADDLE_AXIS + Constants.BALL_RADIUS:
-        print(left_racket_bottom_y, ball_y, left_racket_top_y)
-
     if ((ball_x == Constants.RIGHT_PADDLE_AXIS - Constants.BALL_RADIUS) and
             right_racket_top_y > ball_y > right_racket_bottom_y):
         ball.bounce_x()
 
     if ((ball_x == Constants.LEFT_PADDLE_AXIS + Constants.BALL_RADIUS) and
             left_racket_bottom_y < ball_y < left_racket_top_y):
-        print("Allo")
         ball.bounce_x()
 
     if ball_x == Constants.LEFT_HALF:
