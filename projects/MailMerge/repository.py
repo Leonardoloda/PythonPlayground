@@ -13,4 +13,3 @@ class Repository:
     def write_file(self, content, filename=""):
         with open(self.path + filename, 'w') as f:
             f.write(content)
-    
