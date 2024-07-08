@@ -1,6 +1,7 @@
 from turtle import Screen
 
 from food import Food
+from projects.SnakeGame.repository import Repository
 from score import Score
 from snake import Snake
 
@@ -16,6 +17,8 @@ BODY_PART_SIZE = 20
 PLAYABLE_WIDTH = WIDTH - (MARGIN * 2)
 PLAYABLE_HEIGHT = HEIGHT - (MARGIN * 2)
 
+PATH = "data/highest_scores.txt"
+
 screen.setup(width=WIDTH, height=HEIGHT)
 screen.bgcolor(BG_COLOR)
 screen.title(titlestring=TITLE)
@@ -23,7 +26,8 @@ screen.tracer(n=0)
 
 snake = Snake()
 food = Food()
-score = Score()
+repository = Repository(path=PATH)
+score = Score(repository=repository)
 
 screen.update()
 
@@ -45,19 +49,18 @@ while still_alive:
 
     if snake.head.distance(food) < 15:
         snake.grow_body()
-        score.update_score()
+        score.add_point()
         food.relocate(WIDTH, HEIGHT)
 
     if (snake.head.xcor() > PLAYABLE_WIDTH / 2
             or snake.head.xcor() < -PLAYABLE_WIDTH / 2
             or snake.head.ycor() < -PLAYABLE_HEIGHT / 2
             or snake.head.ycor() > PLAYABLE_HEIGHT / 2):
-        score.game_over()
-        still_alive = False
+        score.reset()
+        snake.reset_body()
 
     for part in snake.body[2:]:
         if snake.head.distance(part) < BODY_PART_SIZE:
-            score.game_over()
-            still_alive = False
+            score.reset()
 
 screen.exitonclick()

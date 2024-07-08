@@ -18,8 +18,6 @@ class Snake:
 
         self.create_snake()
 
-        self.alive = True
-
     def add_part(self):
         new_body = Turtle(shape="square")
         new_body.color("white")
@@ -46,6 +44,15 @@ class Snake:
 
     def grow_body(self):
         self.add_part()
+
+    def reset_body(self):
+        for segment in self.body:
+            segment.hideturtle()
+
+        self.body = []
+        self.haed = None
+
+        self.create_snake()
 
     def move_forward(self):
         sleep(1 / 10)
