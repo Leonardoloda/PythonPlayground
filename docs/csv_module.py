@@ -15,7 +15,6 @@ with open("files/weather_data.csv") as weather_date:
     print(body)
 
 # Instead you can use the csv module
-import csv
 
 with open("./files/weather_data.csv") as weather_date:
     # Now the module handles all the file parsing
