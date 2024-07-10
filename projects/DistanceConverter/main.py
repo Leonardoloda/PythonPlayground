@@ -27,8 +27,13 @@ miles_label.grid(column=1, row=1)
 
 convert_button.grid(column=0, row=3, columnspan=2)
 
-km_to_miles = lambda km: km * CONVERSION_FACTOR
-miles_to_km = lambda miles: miles / CONVERSION_FACTOR
+
+def km_to_miles(km):
+    return km * CONVERSION_FACTOR
+
+
+def miles_to_km(miles):
+    return miles / CONVERSION_FACTOR
 
 
 def convert():
