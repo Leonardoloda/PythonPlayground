@@ -1,8 +1,8 @@
-import datetime
+from datetime import datetime
 
 
 def log(message, level):
-    print(f"{datetime.datetime.now()}    {level.upper()}: {message}")
+    print(f"{datetime.now()}    {level.upper()}: {message}")
 
 
 log(message="Hello world", level="INFO")
@@ -10,7 +10,7 @@ log(message="Hello world", level="INFO")
 
 # you can also use default values
 def log_dev(message, level="debug"):
-    print(f"{datetime.datetime.now()}    {level.upper()}: {message}")
+    print(f"{datetime.now()}    {level.upper()}: {message}")
 
 
 # Now you don't need to passs that argument
@@ -31,7 +31,7 @@ print(total)
 
 # it can also be used with position arguments
 def log_any(*messages, level):
-    print(f"{datetime.datetime.now()}    {level.upper()}: {"".join(messages)}")
+    print(f"{datetime.now()}    {level.upper()}: {"".join(messages)}")
 
 
 # positional arguments always need to go first
