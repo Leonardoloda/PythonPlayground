@@ -4,7 +4,7 @@ from tkinter import *
 class QuizzInterface:
     THEME_COLOR = "#375362"
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.window = Tk()
 
         self.window.title("Quizz")
