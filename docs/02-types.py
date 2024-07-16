@@ -30,7 +30,7 @@ print(number1 + number2)
 print(number1 - number2)
 print(number1 * number2)
 print(number1 / number2)
-print(number1**number2)  # Exponentials do change
+print(number1 ** number2)  # Exponential do change
 
 # numbers can also be rounded
 print("round(pi, 2)", round(3.1459, 2))
@@ -43,7 +43,7 @@ print(f"Your score is {number1}")
 
 # Tip calculator
 print("Welcome to the tip calculator.")
-bill = input("What wass the total bill? $")
+bill = input("What was the total bill? $")
 tip = input("Would you like to give 10, 12, or 15% tip? ")
 people = input("How many people to split the bill? ")
 

@@ -11,7 +11,7 @@ increase_enemies()
 print(f"enemies outside function {enemies}")
 
 
-# global variables can only be changed wwith the global keyword
+# global variables can only be changed with the global keyword
 def increase_global_enemies():
     # This is highly not recommended
     global enemies

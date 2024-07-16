@@ -1,4 +1,5 @@
 from smtplib import SMTP
+
 from dotenv import dotenv_values
 
 
@@ -11,9 +12,9 @@ class EmailClient:
 
         self.path = path
 
-        self.initalize()
+        self.initialize()
 
-    def initalize(self):
+    def initialize(self):
         """Fetch the credentials for the sender account"""
         config = dotenv_values(self.path)
 

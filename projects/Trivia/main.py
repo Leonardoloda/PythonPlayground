@@ -9,11 +9,11 @@ for question in question_data:
 
 host = Host(question_bank)
 
-host.start_gameshow()
+host.start_game()
 
 while host.has_more_questions():
     answer = host.ask_question()
 
     host.next_question()
 
-host.end_gameshow()
+host.end_game()

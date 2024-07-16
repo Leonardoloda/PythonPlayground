@@ -1,11 +1,10 @@
-"""Control the speexd of the game"""
+"""Control the speed of the game"""
 
 from time import sleep
-
 from turtle import Screen
 
-from player import Player
 from car_manager import CarManager
+from player import Player
 from scoreboard import Scoreboard
 
 screen = Screen()

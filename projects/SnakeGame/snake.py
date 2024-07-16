@@ -50,7 +50,7 @@ class Snake:
             segment.hideturtle()
 
         self.body = []
-        self.haed = None
+        self.head = None
 
         self.create_snake()
 

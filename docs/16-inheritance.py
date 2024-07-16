@@ -24,7 +24,7 @@ class Fish(Animal):
         print("Underwater")
 
     def swim(self):
-        print("Swiming")
+        print("Swimming")
 
 
 gold_fish = Fish("Gold Fish")

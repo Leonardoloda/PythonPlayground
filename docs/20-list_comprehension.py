@@ -1,4 +1,4 @@
-# So far list have been created using for loopes
+# So far list have been created using for loops
 numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 numbers_easy = [n for n in range(10)]
 
@@ -21,7 +21,7 @@ new_list_plus = [n + 1 for n in numbers]
 
 print(new_list_plus)
 
-# works with other form of fors
+# works with other form of for
 empty_list = ["" for i in range(10)]
 
 print(empty_list)

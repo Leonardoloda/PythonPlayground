@@ -38,7 +38,7 @@ else:
   print("You can't ride the rollercoaster!")
 '''
 
-# Comparision Operators
+# Comparison Operators
 
 # > Greater than
 # < Less than

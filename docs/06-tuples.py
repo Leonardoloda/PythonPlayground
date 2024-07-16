@@ -97,8 +97,8 @@ painter.spirograph(radius=200, steps=5)
 
 screen.exitonclick()
 
-# Python supports tuples that are inmutable lists
+# Python supports tuples that are immutable lists
 tuple = (1, 2, 3)
 
-# Therefo0re you cant change value
+# Therefore you cant change value
 # tuple[0] = 2

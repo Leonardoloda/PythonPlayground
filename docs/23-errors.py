@@ -20,17 +20,16 @@ print(numbers[5])
 print("abc" + 5)
 """
 
-# Exceptions can be catched with a try catch block
+# Exceptions can be caught with a try catch block
 try:
     result = "abc" + 5
 except:
     print("Error happened")
 finally:
-    print("Finalaly convert it")
+    print("Finally convert it")
     print("abc" + str(5))
 
-
-# However you should be specific about the exceptions being catched
+# However you should be specific about the exceptions being caught
 try:
     file = open("files/unexisting.txt")
     custom_dict = {"key": "value"}
@@ -46,14 +45,15 @@ except KeyError as error_message:
     print("ERR - Not existing key", error_message)
 
 # If it works, we can just put the rest of the code in the else
-else: 
+else:
     content = file.read()
     print(content)
 
-# Finally allolws you to execute no mather what happened
+# Finally allows you to execute no mather what happened
 finally:
     print("Close the file")
     file.close()
+
 
 # Errors can also be raised manually
 def add(n1, n2):
@@ -61,16 +61,17 @@ def add(n1, n2):
 
     if not isinstance(n1, int):
         raise TypeError("Invalid type in n1")
-    
+
     if not isinstance(n2, int):
-        raise TypeError("Innvalid type in n2")
-    
+        raise TypeError("Invalid type in n2")
+
     return n1 + n2
+
 
 try:
     result = add("5", 3)
 except TypeError as message:
     print(f"Error: {message}")
 finally:
-    result = add(5,3)
+    result = add(5, 3)
     print(result)

@@ -8,7 +8,7 @@ class JSONRepository:
         self.path = path
 
     def initialize(self):
-        """Read the inital content or, if the file doesn't exist create a new one"""
+        """Read the initial content or, if the file doesn't exist create a new one"""
         try:
             with open(self.path, mode="r", encoding="utf8") as file:
                 pass

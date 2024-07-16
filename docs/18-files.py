@@ -1,15 +1,15 @@
 # You can open files with the open command
 
-fiile = open("./files/sample.txt")
+file = open("./files/sample.txt")
 
 # You can read the content from the file
-content = fiile.read()
+content = file.read()
 
 # Now you can access the content
 print(content)
 
 # We have to make sure to close the file to keep performance
-fiile.close()
+file.close()
 
 # To avoid opening an closing connections, you can use with  to open and close automatically
 with open("./files/sample.txt") as file_with:

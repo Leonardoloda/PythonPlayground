@@ -1,12 +1,12 @@
 import smtplib
 
-# To keep the credentialas secure use a configuration file
+# To keep the credentials secure use a configuration file
 from dotenv import dotenv_values
 
 # Read it from the filesystem
 config = dotenv_values("files/credentials.env")  # take environment variables
 
-# Now yo ucan get your value
+# Now you can get your value
 EMAIL = config.get("EMAIL")
 PASSWORD = config.get("PASSWORD")
 
@@ -25,7 +25,7 @@ connection.close()
 
 print("Email sent!")
 
-# Emails can also be sent using the with and we can avoid havint to close the connection
+# Emails can also be sent using the with and we can avoid having to close the connection
 with smtplib.SMTP(host='smtp.gmail.com', port=587) as connection:
     connection.starttls()
     connection.login(EMAIL, PASSWORD)

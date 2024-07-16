@@ -1,7 +1,9 @@
+from random import choice
+
+from replit import clear
+
 from art import logo, vs
 from game_data import data
-from random import choice
-from replit import clear
 
 
 def welcome_screen():
@@ -16,13 +18,13 @@ def pick_contestant(available):
     return contestant
 
 
-def show_vs(main, oponent):
+def show_vs(main, opponent):
     print(
         f"Compare A: {main['name']}, a {main['description']}, from {main['country']}"
     )
     print(vs)
     print(
-        f"Compare B: {oponent['name']}, a {oponent['description']}, from {oponent['country']} \n"
+        f"Compare B: {opponent['name']}, a {opponent['description']}, from {opponent['country']} \n"
     )
 
 
@@ -30,17 +32,17 @@ def show_score(score):
     print(f"Score: {score} \n")
 
 
-def get_winner(main, oponent):
-    if main['follower_count'] > oponent['follower_count']:
+def get_winner(main, opponent):
+    if main['follower_count'] > opponent['follower_count']:
         return "A"
     else:
         return "B"
 
 
-def get_result(main, oponent):
+def get_result(main, opponent):
     answer = input("Who has more followers? Type 'A' or 'B': ").upper()
 
-    winner = get_winner(main, oponent)
+    winner = get_winner(main, opponent)
 
     if answer == winner:
         return True
@@ -59,11 +61,11 @@ def start_game():
 
     while is_victory == True and len(data) > 0:
         show_score(score)
-        oponent = pick_contestant(data)
+        opponent = pick_contestant(data)
 
-        show_vs(main=main, oponent=oponent)
+        show_vs(main=main, opponent=opponent)
 
-        is_victory = get_result(main, oponent)
+        is_victory = get_result(main, opponent)
 
         if is_victory == True:
             clear()

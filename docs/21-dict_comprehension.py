@@ -1,4 +1,4 @@
-# Similar to list comprehension, you can do it iwth dicts
+# Similar to list comprehension, you can do it with dicts
 from random import randrange
 
 names = ["Alex", "Beth", "Caroline", "Dave", "Eleanor", "Freddie"]

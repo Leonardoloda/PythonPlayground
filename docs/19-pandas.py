@@ -6,7 +6,7 @@ data = pandas.read_csv("files/weather_data.csv")
 # Pandas basic type i a DataFrame, it contains a table with the data
 print(type(data))
 
-# You can find lots of funcitons in the documentation for the DataFrame like converting to dic
+# You can find lots of functions in the documentation for the DataFrame like converting to dic
 print(data.to_dict())
 
 temperatures = data['temp']
@@ -23,7 +23,7 @@ print(temperatures_list)
 # Statistics can be done manually
 print(sum(temperatures_list) / len(temperatures_list))
 
-# It has a lot of built functions for statitical analysis
+# It has a lot of built functions for statistical analysis
 print(f"Average temperature: {temperatures.mean()}")
 
 print(f"Max temperature: {temperatures.max()}")
@@ -50,7 +50,7 @@ print(max_temperature_day.condition)
 
 print(monday_row.temp.apply(lambda value: value * 9 / 5 + 32))
 
-# You can also use it to create adtaframe from python variables
+# You can also use it to create dataframe from python variables
 data_dict = {
     "students": ["leo", "James", "Angela"],
     "scores": [100, 10, 50]

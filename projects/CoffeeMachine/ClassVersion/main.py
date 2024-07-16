@@ -16,9 +16,9 @@ def create_coffee():
     if not drink:
         print(f"Sorry {recipe} is not a valid recipe!")
 
-    is_craftable = machine.is_resource_sufficient(drink=drink)
+    is_creatable = machine.is_resource_sufficient(drink=drink)
 
-    if not is_craftable:
+    if not is_creatable:
         print(f"Sorry, there's not enough materials to make {drink}")
 
     purchased = cashier.make_payment(cost=drink.cost)

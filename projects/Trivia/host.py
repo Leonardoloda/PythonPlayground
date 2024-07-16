@@ -7,11 +7,11 @@ class Host:
     def increase_score(self, score=1):
         self.score += score
 
-    def start_gameshow(self):
-        print(f"Welcome to your gameshow, time to start the first of {len(self.questions)} \n")
+    def start_game(self):
+        print(f"Welcome to your game, time to start the first of {len(self.questions)} \n")
         self.current_question = 0
 
-    def end_gameshow(self):
+    def end_game(self):
         print("Thank you for playing!")
         print(f"Your final score is {self.score} out of {len(self.questions)}")
 

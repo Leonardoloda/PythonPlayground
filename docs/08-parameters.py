@@ -13,11 +13,11 @@ def log_dev(message, level="debug"):
     print(f"{datetime.now()}    {level.upper()}: {message}")
 
 
-# Now you don't need to passs that argument
+# Now you don't need to pass that argument
 log_dev(message="Hello world")
 
 
-# Or you can have an endless amount of arguments, it will recieve a tuple with the arguments
+# Or you can have an endless amount of arguments, it will receive a tuple with the arguments
 def add(*args):
     print(f"Sum from {args[0]} to {args[-1]}")
     return sum(args)

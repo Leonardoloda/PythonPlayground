@@ -1,9 +1,9 @@
-# Tkniter allows us to create uis
+# Tkinter allows us to create uis
 from tkinter import *
 
 window = Tk()
 
-# We can change the window taittle
+# We can change the window tittle
 window.title("Hello World")
 
 # Set up a minimum size for the window
@@ -21,7 +21,7 @@ custom_label.pack()
 custom_label["text"] = "My second label"
 custom_label.config(text="My third label")
 
-# You can laso use it to craete button
+# You can also use it to create button
 button = Button(text="Click me")
 # You can use place to set any coordinate
 button.place(x=0, y=0)
@@ -91,7 +91,7 @@ radiobutton2.pack()
 
 
 # Listbox
-def listbox_used(event):
+def listbox_used(_):
     print(listbox.get(listbox.curselection()))
 
 

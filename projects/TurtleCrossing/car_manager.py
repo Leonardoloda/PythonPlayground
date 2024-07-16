@@ -1,6 +1,6 @@
-from turtle import Turtle
-from random import choice, randrange
 from math import fabs
+from random import choice, randrange
+from turtle import Turtle
 
 COLORS = ["red", "orange", "yellow", "green", "blue", "purple"]
 STARTING_MOVE_DISTANCE = 5
@@ -42,7 +42,7 @@ class CarManager:
             car.forward(MOVE_INCREMENT)
 
     def has_collided(self, x, y):
-        """Checks if it has crashed to anycar"""
+        """Checks if it has crashed to any car"""
 
         crash_distance_x = 20
         crash_distance_y = 40
@@ -52,8 +52,8 @@ class CarManager:
             car_y = car.ycor()
 
             if (
-                fabs(car_y - y) < crash_distance_y
-                and fabs(car_x - x) < crash_distance_x
+                    fabs(car_y - y) < crash_distance_y
+                    and fabs(car_x - x) < crash_distance_x
             ):
                 return True
 

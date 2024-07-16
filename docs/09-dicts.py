@@ -66,11 +66,11 @@ dictionary_long = {
     "key24": "value24",
 }
 
-# you can iterate with a foor loop
+# you can iterate with a for loop
 for key in dictionary_long:
     print(key, dictionary_long[key])
 
-# any type can be assigend as a value
+# any type can be assigned as a value
 dict_with_list = {
     "cities": ["Paris", "London", "Berlin"]
 }

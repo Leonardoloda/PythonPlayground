@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from repository import Repository
 from email_client import EmailClient
+from repository import Repository
 
 days_of_the_week = [
     "Monday",
@@ -13,13 +13,12 @@ days_of_the_week = [
     "Sunday",
 ]
 
-
 repository = Repository(path="files/quotes.txt")
 client = EmailClient(path=".env")
 
 today = datetime.now().weekday()
 
-if today == 0
+if today == 0:
     quote = repository.get_random_quote()
 
     subject = f"{days_of_the_week[today]}"

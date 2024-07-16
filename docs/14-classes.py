@@ -11,7 +11,7 @@ car.model = "2024"
 print("Car 1 created with empty class", car.model)
 
 
-## However they can be created in the constructor so that they're alwaya ssigned
+## However they can be created in the constructor so that they're always assigned
 class CarV2:
     def __init__(self):
         self.brand = "Toyota"
@@ -23,7 +23,7 @@ car2 = CarV2()
 print("Car 2 created with static attributes", car2.model)
 
 
-## THey can also be send as parameters to the ocnstructor
+## THey can also be send as parameters to the constructor
 
 class CarV3:
     def __init__(self, brand, model):

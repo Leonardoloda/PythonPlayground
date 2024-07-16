@@ -22,7 +22,7 @@ while x < 100:
 
 # screen.exitonclick()
 
-# You can use pypy to search for external librarire
+# You can use pypy to search for external library
 from prettytable import PrettyTable
 
 # Allows us to create a pretty table for ascii
