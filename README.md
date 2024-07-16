@@ -23,29 +23,29 @@ To run these projects locally, you'll need to have Python installed. Follow thes
 
 1. Clone the repository:
 
-```bash
-git clone https://github.com/your-username/your-repo-name.git
-```
+    ```bash
+    git clone https://github.com/your-username/your-repo-name.git
+    ```
 
 2. Navigate to the project directory:
 
-```bash
-cd your-repo-name
-```
+    ```bash
+    cd your-repo-name
+    ```
 
 3. (Optional) Create a virtual environment:
 
-```bash
-python -m venv venv
-
-source venv/bin/activate # On Windows use `venv\Scripts\activate`
-```
+    ```bash
+    python -m venv venv
+    
+    source venv/bin/activate # On Windows use `venv\Scripts\activate`
+    ```
 
 4. Install the required packages:
 
-```bash
-pip install -r requirements.txt
-```
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 ## Usage
 
