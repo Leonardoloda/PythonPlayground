@@ -5,3 +5,4 @@ pyperclip~=1.9.0
 python-dotenv~=1.0.1
 twilio~=9.2.3
 beautifulsoup4~=4.12.3
+spotipy~=2.24.0
