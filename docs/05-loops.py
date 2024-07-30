@@ -16,6 +16,34 @@ for item in anime:
 for number in range(1, 10):
     print(number)
 
+ordinals = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth"]
+
+print("Printing ordinals and index: ")
+
+# You can also use enumerate to have a tracking index, if you don't assing an index, starts from 0
+for index, ordinal in enumerate(ordinals):
+    print(f"{index + 1}. {ordinal}")
+
+# Same thing can be done with the start argument
+for index, ordinal in enumerate(ordinals, start=1):
+    print(f"{index}. {ordinal}")
+
+# It can be done with any type, strings
+word = "abcdefghijklmnopqrst"
+
+for index, letter in enumerate(word, start=1):
+    print(f"{index}. {letter}")
+
+person = {
+    "first_name": "John",
+    "last_name": "Smith",
+    "age": 30,
+}
+
+# or dicts
+for index, key in enumerate(person, start=1):
+    print(f"{index}. {key} is {person[key]}")
+
 # Password generator
 
 import random
