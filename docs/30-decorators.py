@@ -52,3 +52,45 @@ def yell_delayed(name: str):
 
 
 yell_delayed('Jaime')
+
+
+class User:
+    def __init__(self, name: str) -> None:
+        self._name = name
+        self._is_logged = False
+
+    def login(self):
+        self._is_logged = True
+
+    @property
+    def is_logged(self) -> bool:
+        return self._is_logged
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+
+# Decorators can also receive arguments
+def is_logged_in(func):
+    def wrapper(*args):
+        if args[0]._is_logged:
+            return func(*args)
+
+    return wrapper
+
+
+@is_logged_in
+def publish(user: User) -> None:
+    print(f"Posting as {user.name}")
+
+
+publisher = User('John')
+
+# Now an user can't post without being logged in
+publish(publisher)
+
+publisher.login()
+
+# Can post after login
+publish(publisher)
