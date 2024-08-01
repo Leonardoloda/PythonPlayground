@@ -3,9 +3,51 @@ from flask import Flask
 app = Flask(__name__)
 
 
+def bold(func):
+    def wrapper():
+        return "<b>" + func() + "</b>"
+
+    return wrapper
+
+
+def underline(func):
+    def wrapper():
+        return "<u>" + func() + "</u>"
+
+    return wrapper
+
+
+def italic(func):
+    def wrapper():
+        return "<i>" + func() + "</i>"
+
+    return wrapper
+
+
 @app.route("/")
+@bold
+@underline
+@italic
 def hello_world():
     return "<p>Hello, World!</p>"
+
+
+# You can also receive path or url parameters by adding them with a <>
+@app.route("/hello/<user>")
+def hello_user(user):
+    return f"<p>Hello, {user}!</p>"
+
+
+# You can also parse those values
+@app.route("/hello/multiple/<int:times>")
+def hello_multiple_times(times):
+    return [f"<p>Hello, {times}!</p>" for _ in range(times)]
+
+
+# You can use debug mode to check errors
+@app.route("/fail/<name>")
+def fail(name):
+    return f"<p>{name + 1}</p>"
 
 
 # To be able to run flask applications, you need to export a flask_app env
@@ -16,22 +58,6 @@ def hello_world():
 # You can enable debug mode to have hot reloading
 # flask run --debug
 
-# __main__ allows us to show the module where code is running
-
-print("Running from terminal", __name__)
-
-import random
-
-print("Running code from module", random.__name__)
-
-
-class CustomClass:
-    def __init__(self):
-        pass
-
-
-print("Running from module", CustomClass.__name__)
-
 # You can also run it using the __name__ attribute
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8080)
