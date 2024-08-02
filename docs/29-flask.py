@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
@@ -48,6 +48,12 @@ def hello_multiple_times(times):
 @app.route("/fail/<name>")
 def fail(name):
     return f"<p>{name + 1}</p>"
+
+
+# you can also use static files, but they need to be located in the template
+@app.get("/static")
+def static_files():
+    return render_template("home.html")
 
 
 # To be able to run flask applications, you need to export a flask_app env
