@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
@@ -54,6 +54,19 @@ def fail(name):
 @app.get("/static")
 def static_files():
     return render_template("home.html")
+
+
+@app.get("/form")
+def form_page():
+    return render_template("form.html")
+
+
+@app.post("/submit")
+def submit():
+    # You can receive info from a form by using the request object from flask
+    name = request.form["name"]
+
+    return redirect(url_for("hello_user", user=name))
 
 
 # To be able to run flask applications, you need to export a flask_app env
