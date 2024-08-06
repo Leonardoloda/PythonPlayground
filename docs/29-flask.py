@@ -1,6 +1,15 @@
+from os import urandom
+
 from flask import Flask, render_template, request, redirect, url_for
+from flask_bootstrap import Bootstrap5
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import DataRequired, length
 
 app = Flask(__name__)
+
+# flask boostrap allows you to create parent templates with bootstrap loaded
+bootstrap = Bootstrap5(app)
 
 
 def bold(func):
@@ -67,6 +76,55 @@ def submit():
     name = request.form["name"]
 
     return redirect(url_for("hello_user", user=name))
+
+
+SECRET_KEY = urandom(32)
+app.config['SECRET_KEY'] = SECRET_KEY
+
+
+# You can use flask wtf to create forms with validatiosn
+class LoginForm(FlaskForm):
+    # YOu can pass the list of validator you wanna use
+    user = StringField('user', validators=[DataRequired(), length(min=8, max=12)])
+    password = PasswordField('password', validators=[DataRequired(), length(min=8, max=12)])
+    login = SubmitField('Login', validators=[DataRequired()])
+
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+
+    user = form.user.data
+    password = form.password.data
+
+    # Once you disable form validation in the browser, you can validate it here
+    if form.validate_on_submit():
+        return redirect(url_for('login_success'))
+    else:
+        return redirect(url_for('login_fail'))
+
+    return render_template('login.html', form=form)
+
+
+# You can use template inheritance to create multiple childs of a template
+@app.get("/login/success")
+def login_success():
+    print("Login Success")
+    return render_template("success.html")
+
+
+@app.get("/login/fail")
+def login_fail():
+    print("fail")
+    return render_template("fail.html")
+
+
+# using bootsrap flask we can do the same but much simpler
+@app.get('/login/bootstrap')
+def login_bootstrap():
+    form = LoginForm()
+
+    return render_template("login_bootstrap.html", form=form)
 
 
 # To be able to run flask applications, you need to export a flask_app env

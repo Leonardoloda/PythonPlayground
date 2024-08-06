@@ -1,0 +1,20 @@
+{% extends "login_result.html" %}
+
+{% block title %}Fail{% endblock %}
+
+{% block styles %}
+{{ super() }}
+
+<style>
+    body {
+        background-color: lightcoral;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+<h1>Login failed</h1>
+<p>Your login attempt has failed, you've been blocked from teh system</p>
+
+{% endblock %}
