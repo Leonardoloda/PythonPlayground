@@ -8,3 +8,5 @@ beautifulsoup4~=4.12.3
 spotipy~=2.24.0
 selenium~=4.23.1
 Flask~=3.0.3
+flask_sqlalchemy==3.1.1
+SQLAlchemy==2.0.25
