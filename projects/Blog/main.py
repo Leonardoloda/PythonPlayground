@@ -1,30 +1,40 @@
-from datetime import datetime
-from os import getenv
+from datetime import date
+from typing import List
 
-from dotenv import load_dotenv
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 from flask_bootstrap import Bootstrap5
-from flask_ckeditor import CKEditorField, CKEditor
+from flask_ckeditor import CKEditor
+from flask_gravatar import Gravatar
+from flask_login import UserMixin, LoginManager, login_required, login_user, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import FlaskForm
-from sqlalchemy import Integer, String, Text
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from wtforms.fields import StringField, SubmitField
-from wtforms.validators import DataRequired, URL
+from sqlalchemy import Integer, String, Text, ForeignKey
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from werkzeug.security import generate_password_hash, check_password_hash
 
-from email_client import EmailClient
-
-load_dotenv()
-
-EMAIL = getenv('EMAIL')
-PASSWORD = getenv('PASSWORD')
-
-client = EmailClient(EMAIL, PASSWORD)
+from decorators import admin_only
+# Import your forms from the forms.py
+from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 
 app = Flask(__name__)
-
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+ckeditor = CKEditor(app)
 Bootstrap5(app)
+
+# For adding profile images to the comment section
+gravatar = Gravatar(app,
+                    size=100,
+                    rating='g',
+                    default='retro',
+                    force_default=False,
+                    force_lower=False,
+                    use_ssl=False,
+                    base_url=None)
+
+# TODO: Configure Flask-Login
+
+login_manager = LoginManager()
+
+login_manager.init_app(app)
 
 
 # CREATE DATABASE
@@ -36,12 +46,22 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
-app.config['CKEDITOR_PKG_TYPE'] = 'basic'
-ckeditor = CKEditor(app)
+
+class User(db.Model, UserMixin):
+    __tablename__ = 'users'
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    email: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
+    password: Mapped[str] = mapped_column(String(250), nullable=False)
+    name: Mapped[str] = mapped_column(String(250), nullable=False)
+
+    posts: Mapped[List["BlogPost"]] = relationship(back_populates="author")
+    comments: Mapped[List["Comment"]] = relationship(back_populates="author")
 
 
-# CONFIGURE TABLE
 class BlogPost(db.Model):
+    __tablename__ = "blog_posts"
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     title: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
     subtitle: Mapped[str] = mapped_column(String(250), nullable=False)
@@ -50,129 +70,192 @@ class BlogPost(db.Model):
     author: Mapped[str] = mapped_column(String(250), nullable=False)
     img_url: Mapped[str] = mapped_column(String(250), nullable=False)
 
+    author_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    author: Mapped['User'] = relationship(back_populates="posts")
+    comments: Mapped[List["Comment"]] = relationship(back_populates="post")
+
+
+class Comment(db.Model):
+    __tablename__ = 'comments'
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    text: Mapped[str] = mapped_column(String(250), nullable=False)
+
+    post_id: Mapped[int] = mapped_column(ForeignKey("blog_posts.id"), nullable=False)
+    post: Mapped['BlogPost'] = relationship(back_populates="comments")
+
+    author_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    author: Mapped['User'] = relationship(back_populates="comments")
+
 
 with app.app_context():
     db.create_all()
 
 
-@app.get("/")
-def home_page():
-    posts = db.session.query(BlogPost).order_by(BlogPost.date).all()
-
-    """Home page for the blog"""
-    return render_template("index.html", posts=posts, bg_image="static/assets/img/home-bg.jpg", title="Home")
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 
-@app.get("/<int:post_id>")
-def post(post_id: int):
-    post = db.session.query(BlogPost).get(post_id)
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    register_form = RegisterForm()
 
-    return render_template(
-        "post.html", post=post, title=post.title, bg_image=post.img_url
-    )
+    if register_form.validate_on_submit() and request.method == 'POST':
+        name = register_form.name.data
+        email = register_form.email.data
+        password = register_form.password.data
 
+        secure_password = generate_password_hash(password, method='pbkdf2', salt_length=8)
 
-class BlogPostForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    subtitle = StringField('Subtitle', validators=[DataRequired()])
-    author = StringField('Author', validators=[DataRequired()])
-    img_url = StringField('Image', validators=[DataRequired(), URL()])
-    submit = SubmitField(label="Submit")
+        user = User(name=name, email=email, password=secure_password)
 
-    body = body = CKEditorField('Body')
-
-
-@app.route("/publish", methods=['GET', 'POST'])
-def publish_page():
-    publish_form = BlogPostForm()
-
-    print("errors", publish_form.errors)
-
-    if request.method == "POST" and publish_form.validate():
-        title = publish_form.title.data
-        subtitle = publish_form.subtitle.data
-        author = publish_form.author.data
-        image = publish_form.img_url.data
-        body = publish_form.body.data
-        today = datetime.today()
-
-        post = BlogPost(title=title, subtitle=subtitle, author=author, img_url=image, body=body,
-                        date=today.strftime("%B %d, %Y"))
-
-        db.session.add(post)
+        db.session.add(user)
         db.session.commit()
 
-        return redirect(url_for("home"))
+        return redirect(url_for('login'))
 
-    return render_template("make-post.html", form=publish_form)
+    return render_template("register.html", form=register_form)
 
 
-@app.route("/edit/<int:post_id>", methods=["GET", "POST"])
-def edit_page(post_id: int):
-    post = db.session.query(BlogPost).get(post_id)
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    login_form = LoginForm()
+    error = None
 
-    edit_form = BlogPostForm(
+    if login_form.validate_on_submit() and request.method == 'POST':
+        email = login_form.email.data
+        password = login_form.password.data
+
+        user = db.session.query(User).where(User.email == email).first()
+
+        if not user:
+            error = "Wrong email"
+            return render_template('login.html', form=login_form, error=error)
+
+        is_valid_password = check_password_hash(user.password, password)
+
+        if not is_valid_password:
+            error = "Wrong password"
+            return render_template('login.html', form=login_form, error=error)
+
+        login_user(user)
+
+        return redirect(url_for('get_all_posts'))
+
+    return render_template("login.html", form=login_form, error=error)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+
+    return redirect(url_for('get_all_posts'))
+
+
+@app.route('/')
+def get_all_posts():
+    result = db.session.execute(db.select(BlogPost))
+    posts = result.scalars().all()
+    is_admin = False
+
+    if current_user.is_authenticated:
+        is_admin = current_user.id == 1
+
+    return render_template("index.html", all_posts=posts, logged_in=current_user.is_authenticated, is_admin=is_admin)
+
+
+@app.route("/post/<int:post_id>", methods=["GET", "POST"])
+def show_post(post_id):
+    comment_form = CommentForm()
+    requested_post = db.get_or_404(BlogPost, post_id)
+    comments = db.session.execute(db.select(Comment).where(Comment.post_id == int(post_id))).scalars().all()
+    is_admin = False
+
+    print(comments[0].text)
+
+    if current_user.is_authenticated:
+        is_admin = current_user.id == 1
+
+    if request.method == "GET" and current_user.is_authenticated:
+        return render_template("post.html", post=requested_post, form=comment_form,
+                               logged_in=current_user.is_authenticated, comments=comments)
+
+    if request.method == "POST" and current_user.is_authenticated and comment_form.validate_on_submit():
+        text = comment_form.text.data
+
+        comment = Comment(text=text, author_id=current_user.id, post_id=post_id)
+
+        db.session.add(comment)
+        db.session.commit()
+
+    return render_template("post.html", post=requested_post, logged_in=current_user.is_authenticated, is_admin=is_admin,
+                           comments=comments)
+
+
+@app.route("/new-post", methods=["GET", "POST"])
+@login_required
+@admin_only
+def add_new_post():
+    form = CreatePostForm()
+
+    if form.validate_on_submit():
+        new_post = BlogPost(
+            title=form.title.data,
+            subtitle=form.subtitle.data,
+            body=form.body.data,
+            img_url=form.img_url.data,
+            author=current_user,
+            date=date.today().strftime("%B %d, %Y")
+        )
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect(url_for("get_all_posts"))
+
+    return render_template("make-post.html", form=form, logged_in=current_user.is_authenticated)
+
+
+@app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
+@login_required
+@admin_only
+def edit_post(post_id):
+    post = db.get_or_404(BlogPost, post_id)
+
+    edit_form = CreatePostForm(
         title=post.title,
         subtitle=post.subtitle,
-        author=post.author,
         img_url=post.img_url,
+        author=post.author,
         body=post.body
     )
-
-    if request.method == "POST" and edit_form.validate():
+    if edit_form.validate_on_submit():
         post.title = edit_form.title.data
         post.subtitle = edit_form.subtitle.data
-        post.author = edit_form.author.data
         post.img_url = edit_form.img_url.data
+        post.author = current_user
         post.body = edit_form.body.data
-
         db.session.commit()
+        return redirect(url_for("show_post", post_id=post.id))
 
-        return redirect(url_for("post", post_id=post.id))
-
-    return render_template("make-post.html", form=edit_form, title="Edit Post")
+    return render_template("make-post.html", form=edit_form, is_edit=True)
 
 
-@app.get("/delete/<int:post_id>")
-def delete(post_id: int):
-    post = db.session.query(BlogPost).get(post_id)
-
-    db.session.delete(post)
+# TODO: Use a decorator so only an admin user can delete a post
+@app.route("/delete/<int:post_id>")
+def delete_post(post_id):
+    post_to_delete = db.get_or_404(BlogPost, post_id)
+    db.session.delete(post_to_delete)
     db.session.commit()
-
-    return redirect(url_for("home_page"))
-
-
-@app.get("/contact")
-def contact_page():
-    return render_template("contact.html", title="Contact", bg_image="static/assets/img/contact-bg.jpg")
+    return redirect(url_for('get_all_posts'))
 
 
-@app.post("/contact")
-def submit_form():
-    name = request.form.get("name")
-    email = request.form.get("email")
-    phone = request.form.get("phone")
-    message = request.form.get("message")
-
-    subject = "A new person has interacted with your blog"
-    body = f"""
-        Name: {name}
-        Email: {email}
-        Phone: {phone}
-        
-        Message: 
-        {message}
-    """
-
-    client.send_email(email=EMAIL, subject=subject, body=body)
-
-    return "Contact form submitted"
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 
-@app.get("/about")
-def about_page():
-    return render_template("about.html", title="About", bg_image="static/assets/img/about-bg.jpg")
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
 
 
 if __name__ == "__main__":
