@@ -30,8 +30,6 @@ gravatar = Gravatar(app,
                     use_ssl=False,
                     base_url=None)
 
-# TODO: Configure Flask-Login
-
 login_manager = LoginManager()
 
 login_manager.init_app(app)
