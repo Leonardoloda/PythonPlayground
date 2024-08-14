@@ -7,6 +7,9 @@ twilio~=9.2.3
 beautifulsoup4~=4.12.3
 spotipy~=2.24.0
 selenium~=4.23.1
-Flask~=3.0.3
+Flask~=2.3.2
 flask_sqlalchemy==3.1.1
 SQLAlchemy==2.0.25
+Werkzeug==3.0.0
+Flask_Login==0.6.3
+Flask-Gravatar==0.5.0
