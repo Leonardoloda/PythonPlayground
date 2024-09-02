@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Pending</h2>
+
+{% for todo in todos: %}
+{% if todo.status == "pending" %}
+<li>
+    <a href="{{url_for('delete', todo_id = todo.id)}}">{{todo.description}}</a>
+</li>
+{% endif %}
+{% endfor %}
+
+<h2>Completed</h2>
+
+{% for todo in todos: %}
+{% if todo.status == "completed" %}
+<li>
+    <a href="{{url_for('delete', todo_id = todo.id)}}">{{todo.description}}</a>
+</li>
+{% endif %}
+{% endfor %}
+
+<a href="{{url_for('add')}}">Add TODO</a>
+{% endblock %}
